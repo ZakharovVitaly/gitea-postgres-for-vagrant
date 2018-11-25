@@ -3,7 +3,7 @@
     name: "{{admin_user}}"
     state: present
 
-- name: Add the user {{admin_user}} with group {{admin_group}}
+- name: Adding user {{admin_user}} with group {{admin_group}}
   user:
     name: "{{admin_user}}"
     groups: ["{{admin_user}}", "{{admin_group}}"]
