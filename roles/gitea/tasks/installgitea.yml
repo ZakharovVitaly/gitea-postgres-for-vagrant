@@ -1,0 +1,111 @@
+- name: Creating group git
+  group:
+    name: git
+    state: present
+
+- name: Creating user git
+  user:
+    name: git
+    uid: 9999
+    group: git
+    home: "{{gitea_install_path}}"
+    shell: /bin/false
+    skeleton: false
+    state: present
+
+- name: Installing Git for Gitea
+  apt:
+    name: "git"
+    state: latest
+    install_recommends: no
+    update_cache: yes
+
+#- name: Uploading Gitea binary
+#  copy:
+#    src: "{{gitea_binary}}"
+#    dest: "{{gitea_install_path}}"
+#    owner: root
+#    group: git
+#    mode: 0750
+
+- name: Downloading Gitea binary
+  get_url:
+    url={{gitea_download_url}}
+    dest="{{gitea_install_path}}/{{gitea_binary}}"
+    owner=root
+    group=git
+    mode=0750
+
+- name: Creating Gitea config path
+  file:
+    path: "{{gitea_install_path}}/custom/conf"
+    state: directory
+    owner: git
+    group: git
+    mode: 0770
+    recurse: yes
+
+- name: Creating Gitea HTTPS keys storage
+  file:
+    path: "{{gitea_install_path}}/custom/https"
+    state: directory
+    owner: git
+    group: git
+    mode: 0770
+    recurse: yes
+
+- name: Installing python OpenSSL library
+  apt:
+    name: "python-ndg-httpsclient"
+    state: latest
+    install_recommends: no
+
+- name: Creating OpenSSL key for Gitea
+  openssl_privatekey:
+    path: "{{gitea_install_path}}/custom/https/{{gitea_server_crypto}}.key"
+    owner: git
+
+- name: Creating certificate request (CSR) for Gitea
+  openssl_csr:
+    path: "{{gitea_install_path}}/custom/https/{{gitea_server_crypto}}.csr"
+    privatekey_path: "{{gitea_install_path}}/custom/https/{{gitea_server_crypto}}.key"
+    country_name: RU
+    organization_name: Horns and Hoofs
+    email_address: jdoe@example.com
+    common_name: example.com
+    owner: git
+
+- name: Generating a self signed OpenSSL certificate for Gitea
+  openssl_certificate:
+    path: "{{gitea_install_path}}/custom/https/{{gitea_server_crypto}}.crt"
+    privatekey_path: "{{gitea_install_path}}/custom/https/{{gitea_server_crypto}}.key"
+    csr_path: "{{gitea_install_path}}/custom/https/{{gitea_server_crypto}}.csr"
+    provider: selfsigned
+    valid_in: 1209600
+    owner: git
+
+- name: Creating Gitea config
+  template:
+    src: "app.ini.j2"
+    dest: "{{gitea_install_path}}/custom/conf/app.ini"
+    owner: git
+    group: git
+    mode: 0660
+
+- name: Creating Gitea systemd service
+  template:
+    src: "gitea.service.j2"
+    dest: "/etc/systemd/system/{{gitea_service_name}}"
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Reloading systemd service files
+  systemd:
+    daemon_reload: yes
+
+- name: Starting Gitea as service
+  systemd:
+    name: "{{gitea_service_name}}"
+    state: started
+    enabled: yes

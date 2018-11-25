@@ -1,0 +1,34 @@
+- hosts: all
+  vars:
+    ntp_server: pool.ntp.org
+    gitea_timezone: Europe/Moscow
+    gitea_install_path: /opt/gitea
+    gitea_binary: gitea-1.6
+    gitea_service_name: gitea.service
+    gitea_download_url: "https://dl.gitea.io/gitea/1.6/gitea-1.6-linux-amd64"
+    gitea_db: gitea
+    gitea_db_user: gitea
+    gitea_db_password: gitea
+    gitea_port: 443
+    gitea_name: FooBar
+    gitea_server_crypto: gitea-tls
+    ssh_bind_port: 22
+    ssh_bind4_address: 0.0.0.0
+    ssh_bind6_address: "::"
+    new_root_password: P@ssw0rd
+    admin_user: johndoe
+    admin_group: sudo
+    admin_password: JohnDoe
+  pre_tasks:
+    - name: Check Linux Distributive
+      meta: end_play
+      when: ansible_distribution != "Debian"
+    - name: Check Linux Version
+      meta: end_play
+      when: ansible_distribution_release != 'stretch'
+  roles:
+    - preinst
+    - postgres
+    - gitea
+    - mountrepo
+    - postinst

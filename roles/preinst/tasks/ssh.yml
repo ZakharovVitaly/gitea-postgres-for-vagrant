@@ -1,0 +1,16 @@
+- name: New ssh RSA key pair creation
+  shell: "yes | ssh-keygen -t rsa -b 2048 -P '' -f /etc/ssh/ssh_host_rsa_key"
+
+- name: New ssh ECDSA key pair creation
+  shell: "yes | ssh-keygen -t ecdsa -b 521 -P '' -f /etc/ssh/ssh_host_ecdsa_key"
+
+- name: New ssh ED25519 key pair creation
+  shell: "yes | ssh-keygen -t ed25519 -b 256 -P '' -f /etc/ssh/ssh_host_ed25519_key"
+
+- name: New ssh configuration erection
+  template:
+    src: "sshd_config.j2"
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0600

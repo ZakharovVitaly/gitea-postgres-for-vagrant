@@ -1,0 +1,13 @@
+- name: Set timezone to {{gitea_timezone}}
+  timezone:
+    name: "{{gitea_timezone}}"
+
+- name: Installing ntpdate
+  apt:
+    name: 'ntpdate'
+    state: latest
+    install_recommends: no
+    update_cache: yes
+
+- name: Setting time from NTP server {{ntp_server}}
+  shell: ntpdate "{{ntp_server}}"

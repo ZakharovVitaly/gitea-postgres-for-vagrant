@@ -1,0 +1,4 @@
+- import_tasks: preparing.yml
+- import_tasks: settime.yml
+- import_tasks: ssh.yml
+- import_tasks: adminuser.yml

@@ -1,0 +1,15 @@
+- name: Creating repo directory
+  file:
+    path: "{{gitea_install_path}}/gitea-repositories/example.com"
+    state: directory
+    owner: git
+    group: git
+    mode: 0750
+    recurse: yes
+
+- name: Extracting foobar repo template
+  unarchive:
+    src: "foobar.git.tgz"
+    dest: "{{gitea_install_path}}/gitea-repositories/example.com"
+    owner: git
+    group: git

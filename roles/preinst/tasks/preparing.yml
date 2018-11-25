@@ -1,0 +1,29 @@
+- name: Resetting root password
+  shell: "yes '{{new_root_password}}' | passwd root"
+
+- name: Python-apt package installation
+  shell: "/usr/bin/apt -y install python-apt"
+
+- name: Apt supplemental packages installation
+  apt:
+    name: ['apt-transport-https', 'ca-certificates']
+    state: latest
+    install_recommends: no
+    update_cache: yes
+
+- name: Setting node hostname
+  template:
+    src: "hostname.j2"
+    dest: /etc/hostname
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Cdrom repos removal
+  lineinfile: dest=/etc/apt/sources.list regexp="^deb\s+cdrom" state=absent
+
+- name: Updating system packages
+  apt:
+    update_cache: yes
+    upgrade: yes
+    force_apt_get: yes

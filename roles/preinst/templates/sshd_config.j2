@@ -1,0 +1,32 @@
+Port {{ssh_bind_port}}
+AddressFamily any
+ListenAddress {{ssh_bind4_address}}
+ListenAddress {{ssh_bind6_address}}
+PermitRootLogin no
+StrictModes yes
+MaxAuthTries 2
+MaxSessions 3
+PubkeyAuthentication yes
+PasswordAuthentication yes
+PermitEmptyPasswords no
+ChallengeResponseAuthentication no
+UsePAM yes
+AllowAgentForwarding yes
+AllowTcpForwarding yes
+GatewayPorts no
+X11Forwarding no
+PrintMotd no
+PrintLastLog no
+TCPKeepAlive yes
+UsePrivilegeSeparation sandbox
+Compression delayed
+ClientAliveInterval 0
+ClientAliveCountMax 3
+UseDNS no
+PidFile /var/run/sshd.pid
+MaxStartups 10:30:100
+PermitTunnel yes
+VersionAddendum none
+Banner none
+AcceptEnv LANG LC_*
+Subsystem sftp /usr/lib/openssh/sftp-server

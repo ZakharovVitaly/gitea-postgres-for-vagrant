@@ -1,0 +1,67 @@
+APP_NAME = {{gitea_name}}
+RUN_USER = git
+RUN_MODE = prod
+
+[database]
+DB_TYPE  = postgres
+HOST     = 127.0.0.1:5432
+NAME     = {{gitea_db}}
+USER     = {{gitea_db_user}}
+PASSWD   = {{gitea_db_password}}
+SSL_MODE = require
+PATH     = data/gitea.db
+
+[security]
+INTERNAL_TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE1NDI3MDk2ODF9.BkS80dFvhaOTtDxKfsVaOUK5z5-6xr4znwpIbNUvTSE
+INSTALL_LOCK   = true
+SECRET_KEY     = TlNACzoyplM1ZG4kdBqf7e5Vu2n6is7ZktFeD3NwknzGQaihFOENoMJVkW47IerZ
+
+[repository]
+ROOT = {{gitea_install_path}}/gitea-repositories
+
+[server]
+PROTOCOL         = https
+REDIRECT_OTHER_PORT = true
+CERT_FILE        = {{gitea_install_path}}/custom/https/{{gitea_server_crypto}}.crt
+KEY_FILE         = {{gitea_install_path}}/custom/https/{{gitea_server_crypto}}.key
+SSH_DOMAIN       = {{inventory_hostname}}
+SSH_PORT         = 22
+DISABLE_SSH      = false
+DOMAIN           = {{inventory_hostname}}
+HTTP_PORT        = {{gitea_port}}
+ROOT_URL         = https://{{inventory_hostname}}:{{gitea_port}}
+LFS_START_SERVER = true
+LFS_CONTENT_PATH = {{gitea_install_path}}/data/lfs
+LFS_JWT_SECRET   = Mpsnh0O7cHox1TNbk7pwxGXWcB6oQgtp85Z7gndr7EE
+OFFLINE_MODE     = false
+
+[mailer]
+ENABLED = false
+
+[service]
+REGISTER_EMAIL_CONFIRM            = false
+ENABLE_NOTIFY_MAIL                = false
+DISABLE_REGISTRATION              = false
+ALLOW_ONLY_EXTERNAL_REGISTRATION  = false
+ENABLE_CAPTCHA                    = false
+REQUIRE_SIGNIN_VIEW               = false
+DEFAULT_KEEP_EMAIL_PRIVATE        = false
+DEFAULT_ALLOW_CREATE_ORGANIZATION = true
+DEFAULT_ENABLE_TIMETRACKING       = true
+NO_REPLY_ADDRESS                  = noreply.{{inventory_hostname}}
+
+[picture]
+DISABLE_GRAVATAR        = false
+ENABLE_FEDERATED_AVATAR = true
+
+[openid]
+ENABLE_OPENID_SIGNIN = true
+ENABLE_OPENID_SIGNUP = true
+
+[session]
+PROVIDER = file
+
+[log]
+MODE      = file
+LEVEL     = Info
+ROOT_PATH = {{gitea_install_path}}/log

@@ -1,0 +1,21 @@
+- name: Extracting Gitea database dump to /tmp
+  unarchive:
+    src: "{{gitea_db}}.sql.tgz"
+    dest: "/tmp"
+    owner: postgres
+    group: root
+    mode: 0640
+
+- name: Restoring Gitea database dump
+  become: true
+  become_user: postgres
+  become_method: su
+  postgresql_db:
+    name={{gitea_db}}
+    state=restore
+    target=/tmp/gitea.sql
+
+- name: Removing Gitea database dump from /tmp
+  file:
+    name=/tmp/gitea.sql
+    state=absent
