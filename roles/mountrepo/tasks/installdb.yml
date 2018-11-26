@@ -13,9 +13,9 @@
   postgresql_db:
     name={{gitea_db}}
     state=restore
-    target=/tmp/gitea.sql
+    target="/tmp/{{gitea_db}}.sql"
 
 - name: Removing Gitea database dump from /tmp
   file:
-    name=/tmp/gitea.sql
+    name="/tmp/{{gitea_db}}.sql"
     state=absent
