@@ -11,7 +11,7 @@
   become_user: postgres
   become_method: su
   postgresql_db:
-    name={{gitea_db}}
+    name="{{gitea_db}}"
     state=restore
     target="/tmp/{{gitea_db}}.sql"
 
