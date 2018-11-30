@@ -1,5 +1,10 @@
+- name: Removing "vargant" home directory
+    file:
+    state: absent
+    path: "/home/vagrant/"
+    
 - name: USER "vagrant" IS REMOVED. REBOOTING TARGET NOW. SSH PORT IS {{ssh_bind_port}} USER NAME IS {{admin_user}} USER PASSWORD IS {{admin_password}} ROOT PASSWORD IS {{new_root_password}}
-  shell: "sleep 5 && reboot & userdel -rf vagrant 2>/dev/null"
+  shell: "sleep 5 && reboot & userdel -f vagrant 2>/dev/null"
   async: 1
   poll: 0
   ignore_errors: yes
