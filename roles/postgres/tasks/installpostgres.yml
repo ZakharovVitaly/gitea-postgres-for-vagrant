@@ -8,7 +8,7 @@
 - name: Restarting Postgresql daemon
   systemd:
    name: 'postgresql'
-   state: restarted
+   state: started
    enabled: yes
    daemon-reload: yes
 
